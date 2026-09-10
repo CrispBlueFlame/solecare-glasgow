@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coverage Area | Solecare Glasgow East</title>
+  <meta name="description" content="Check if Solecare Glasgow East covers your postcode. We visit G31, G32, G33, G40, G69, G71 and G72.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="nav-inner">
+    <div class="logo">Solecare<span>Glasgow East</span></div>
+    <nav aria-label="Main navigation">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="prices.html">Prices</a></li>
+        <li><a href="coverage.html" class="active">Coverage</a></li>
+        <li><a href="contact.html" class="btn-nav">Book Now</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-banner">
+    <h1>Service Area</h1>
+    <p>Check your postcode and see if we come to you</p>
+  </div>
+
+  <div class="section">
+
+    <!-- POSTCODE CHECKER -->
+    <div class="checker-box">
+      <h2>Check your postcode</h2>
+      <p>Enter the first part of your postcode (e.g. G32 or G32 4) to instantly see if we cover your area.</p>
+      <div class="checker-input">
+        <input type="text" id="pc-input" placeholder="e.g. G32" maxlength="8" autocomplete="off" aria-label="Enter your postcode">
+        <button onclick="checkPostcode()">Check</button>
+      </div>
+      <div id="checker-result" class="checker-result" role="alert" aria-live="polite"></div>
+    </div>
+
+    <!-- COVERED AREAS GRID -->
+    <div class="areas-heading">Areas we cover</div>
+    <div class="areas-grid">
+
+      <div class="area-card">
+        <div class="area-pc">G31</div>
+        <div class="area-name">Bridgeton and Calton</div>
+        <div class="area-streets">Bridgeton, Calton, Dalmarnock (west), parts of Dennistoun</div>
+      </div>
+
+      <div class="area-card">
+        <div class="area-pc">G32</div>
+        <div class="area-name">Shettleston and Sandyhills</div>
+        <div class="area-streets">Shettleston, Sandyhills, Carmyle, Mount Vernon, Tollcross (east)</div>
+      </div>
+
+      <div class="area-card">
+        <div class="area-pc">G33</div>
+        <div class="area-name">Baillieston and Springboig</div>
+        <div class="area-streets">Baillieston, Springboig, Carntyne, Cranhill, Ruchazie</div>
+      </div>
+
+      <div class="area-card">
+        <div class="area-pc">G40</div>
+        <div class="area-name">Parkhead and Dalmarnock</div>
+        <div class="area-streets">Parkhead, Dalmarnock, Tollcross (west), Shettleston Road</div>
+      </div>
+
+      <div class="area-card">
+        <div class="area-pc">G69</div>
+        <div class="area-name">Baillieston and Garrowhill</div>
+        <div class="area-streets">Baillieston (east), Garrowhill, Barlanark, Swinton</div>
+      </div>
+
+      <div class="area-card">
+        <div class="area-pc">G71</div>
+        <div class="area-name">Uddingston and Viewpark</div>
+        <div class="area-streets">Uddingston, Viewpark, Tannochside, Bellshill (parts)</div>
+      </div>
+
+      <div class="area-card">
+        <div class="area-pc">G72</div>
+        <div class="area-name">Cambuslang and Rutherglen</div>
+        <div class="area-streets">Cambuslang, Newton, Rutherglen, Burnside</div>
+      </div>
+
+    </div>
+
+    <!-- NOT LISTED? -->
+    <div style="background:var(--primary-bg); border-radius:var(--r); padding:32px 36px; margin-bottom:48px; display:grid; grid-template-columns:1fr auto; align-items:center; gap:32px;">
+      <div>
+        <h3 style="font-family:'Raleway',sans-serif; font-size:19px; font-weight:700; margin-bottom:8px;">Your postcode is not listed?</h3>
+        <p style="color:var(--muted); font-size:15px;">The coverage area above covers our regular visits, but we may be able to accommodate nearby addresses not on the list. Get in touch and ask.</p>
+      </div>
+      <a href="contact.html" class="btn-primary" style="white-space:nowrap">Ask us</a>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+      <strong>Note:</strong> Coverage boundaries are indicative. Addresses on the boundary of a listed postcode may or may not be within our regular area, and some outer postcodes (G71, G72) may involve a small travel supplement. We will always confirm coverage and any additional charge before your first appointment.
+    </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">Solecare<span>Glasgow East</span></div>
+      <p>Professional home visit podiatry for Glasgow East. HCPC registered. Appointments available Monday to Friday.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Quick links</h4>
+      <ul>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="prices.html">Prices</a></li>
+        <li><a href="coverage.html">Coverage</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:07700000000">07700 000000</a></li>
+        <li><a href="mailto:hello@solecare-glasgow.co.uk">hello@solecare-glasgow.co.uk</a></li>
+        <li><a href="coverage.html">Glasgow East</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; Solecare Glasgow East 2026. HCPC registered.</p>
+</footer>
+
+<a href="https://wa.me/447700000000" class="whatsapp-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  var covered = ['G31','G32','G33','G40','G69','G71','G72'];
+
+  var areaNames = {
+    'G31': 'Bridgeton and Calton',
+    'G32': 'Shettleston and Sandyhills',
+    'G33': 'Baillieston and Springboig',
+    'G40': 'Parkhead and Dalmarnock',
+    'G69': 'Baillieston and Garrowhill',
+    'G71': 'Uddingston and Viewpark',
+    'G72': 'Cambuslang and Rutherglen'
+  };
+
+  function checkPostcode() {
+    var raw = document.getElementById('pc-input').value.trim().toUpperCase();
+    var resultEl = document.getElementById('checker-result');
+    resultEl.className = 'checker-result';
+    resultEl.style.display = 'none';
+
+    if (!raw) {
+      resultEl.className = 'checker-result no';
+      resultEl.style.display = 'block';
+      resultEl.textContent = 'Please enter a postcode to check.';
+      return;
+    }
+
+    // Extract the outward code (letters+digits before the space, or first 3-4 chars)
+    var outward = raw.split(' ')[0];
+
+    // Try full outward first, then just prefix (G31, G32 etc)
+    var matched = null;
+    if (covered.indexOf(outward) !== -1) {
+      matched = outward;
+    } else {
+      // Try matching just the district prefix against covered list
+      for (var i = 0; i < covered.length; i++) {
+        if (outward.indexOf(covered[i]) === 0 || covered[i].indexOf(outward) === 0) {
+          matched = covered[i];
+          break;
+        }
+      }
+    }
+
+    if (matched) {
+      resultEl.className = 'checker-result yes';
+      resultEl.style.display = 'block';
+      resultEl.innerHTML = '<strong>Yes, we cover your area!</strong> ' + raw + ' falls within the ' + areaNames[matched] + ' area (' + matched + '). <a href="contact.html" style="color:inherit;font-weight:700;text-decoration:underline">Book an appointment</a>';
+    } else {
+      resultEl.className = 'checker-result no';
+      resultEl.style.display = 'block';
+      resultEl.innerHTML = '<strong>Sorry, ' + raw + ' is outside our current service area.</strong> We cover G31, G32, G33, G40, G69, G71 and G72. <a href="contact.html" style="color:inherit;font-weight:700;text-decoration:underline">Contact us</a> to ask about nearby visits.';
+    }
+  }
+
+  document.getElementById('pc-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkPostcode();
+  });
+</script>
+
+</body>
+</html>
