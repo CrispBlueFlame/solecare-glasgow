@@ -1,0 +1,14 @@
+{
+  "name": "solecare-glasgow",
+  "version": "2.0.0",
+  "description": "Home visit podiatry website for Glasgow East",
+  "private": true,
+  "scripts": {
+    "start": "eleventy --serve --port=8202",
+    "build": "eleventy",
+    "clean": "rm -rf _site"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

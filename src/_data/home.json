@@ -1,0 +1,27 @@
+{
+  "heroHeading": "Foot care in the comfort of your own home",
+  "heroText": "A qualified podiatrist visiting homes across Glasgow East. No travelling, no waiting rooms, and no rush. Just friendly, professional care at a time that suits you.",
+  "helpHeading": "What we help with",
+  "helpIntro": "Everyday foot care and treatment, carried out safely and professionally in your own home.",
+  "calloutHeading": "Not sure what you need?",
+  "calloutText": "That is perfectly normal. Get in touch and describe what is bothering you, and we will let you know what would help before arranging a visit.",
+  "stepsHeading": "How it works",
+  "stepsIntro": "Arranging a visit is straightforward.",
+  "steps": [
+    {
+      "title": "Get in touch",
+      "text": "Call, email, or fill in the enquiry form. Tell us a little about what you need and where you live."
+    },
+    {
+      "title": "We arrange a time",
+      "text": "We will agree a date and time that suits you, and confirm what the visit will involve and what it will cost."
+    },
+    {
+      "title": "We come to you",
+      "text": "Everything needed is brought along. All you need is a comfortable chair and somewhere to rest your feet."
+    }
+  ],
+  "areasHeading": "Areas we visit",
+  "areasIntro": "Home visits across Glasgow East and the surrounding areas.",
+  "areasNote": "If your area is not listed, please still get in touch. We may be able to help or suggest someone who can."
+}

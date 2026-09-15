@@ -1,0 +1,44 @@
+{
+  "list": [
+    {
+      "name": "General foot care and nail cutting",
+      "short": "Routine nail cutting, care of thickened nails, and general foot hygiene. This is the service most people ask for, particularly if reaching your own feet has become difficult.",
+      "detail": [
+        "Routine nail cutting and shaping, care of thickened or difficult nails, and general foot hygiene. This is the service most people ask for, particularly if bending down or reaching your own feet has become difficult.",
+        "You will also get simple advice on looking after your feet between visits, and on footwear if it would help."
+      ],
+      "price": "45",
+      "duration": "about 30 minutes"
+    },
+    {
+      "name": "Diabetic foot check",
+      "short": "A careful check of circulation, sensation, and skin condition for anyone living with diabetes. Regular checks are an important part of looking after your feet.",
+      "detail": [
+        "Living with diabetes can affect the circulation and feeling in your feet, sometimes without you noticing. A regular check picks up small changes early, before they become a problem.",
+        "The check covers circulation, sensation, skin, and nails. You will be told clearly what was found and what, if anything, needs attention. If something needs your GP to look at it, we will tell you."
+      ],
+      "price": "55",
+      "duration": "about 45 minutes"
+    },
+    {
+      "name": "Corns, hard skin, and verrucae",
+      "short": "Gentle removal of corns and hard skin, which usually brings relief straight away. Verrucae can also be assessed and treated.",
+      "detail": [
+        "Corns and hard skin build up where there is pressure or rubbing. They are not dangerous but they can be sore, and removing them usually brings relief straight away.",
+        "Verrucae can be stubborn and take time. We will assess yours and talk you through the options honestly, including whether treatment is worth pursuing."
+      ],
+      "price": "50",
+      "duration": "30 to 45 minutes"
+    },
+    {
+      "name": "Ingrown toenails",
+      "short": "Careful treatment to relieve the pain of an ingrown toenail, along with advice on how to prevent it happening again.",
+      "detail": [
+        "An ingrown toenail happens when the edge of the nail presses into the skin beside it. It can be very painful and sometimes becomes infected.",
+        "In most cases the problem can be treated at home without the need for surgery. You will also get advice on cutting technique and footwear to reduce the chance of it returning. If surgery is needed, we will help arrange it."
+      ],
+      "price": "55",
+      "duration": "about 45 minutes"
+    }
+  ]
+}

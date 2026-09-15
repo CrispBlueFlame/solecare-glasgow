@@ -1,0 +1,20 @@
+{
+  "list": [
+    {
+      "question": "Do I need to be referred by my doctor?",
+      "answer": "No. You can get in touch directly. There is no need for a letter or a referral from your GP."
+    },
+    {
+      "question": "What do I need to have ready?",
+      "answer": "Very little. A comfortable chair and somewhere to rest your feet is all that is needed. Everything else is brought along. If you take any medication, it helps to have the list handy for the first visit."
+    },
+    {
+      "question": "Can I arrange a visit for my mum or dad?",
+      "answer": "Yes, and many people do. Just let us know you are enquiring on someone else's behalf and give their address when you get in touch."
+    },
+    {
+      "question": "How do I pay?",
+      "answer": "Payment is made at the end of the visit. Cash and bank transfer are both fine."
+    }
+  ]
+}

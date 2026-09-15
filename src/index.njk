@@ -1,0 +1,67 @@
+---
+layout: base.njk
+permalink: /index.html
+nav: home
+title: Solecare Glasgow East | Foot Care at Home
+description: A qualified podiatrist visiting homes across Glasgow East. Friendly, unhurried foot care in the comfort of your own home.
+---
+{% import "icons.njk" as icon %}
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>{{ home.heroHeading }}</h1>
+    <p>{{ home.heroText }}</p>
+    <div class="hero-actions">
+      <a href="/contact/" class="btn btn-primary">Make an Enquiry</a>
+      <a href="tel:{{ site.phone | telLink }}" class="hero-phone">
+        {{ icon.phone() }}
+        or call {{ site.phone }}
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{ home.helpHeading }}</h2>
+  <p class="intro">{{ home.helpIntro }}</p>
+  <div class="service-list">
+    {% for service in services.list %}
+    <div class="service-item">
+      <h3>{{ service.name }}</h3>
+      <p>{{ service.short }}</p>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="callout">
+    <h3>{{ home.calloutHeading }}</h3>
+    <p>{{ home.calloutText }}</p>
+    <a href="/contact/" class="btn btn-primary">Make an Enquiry</a>
+  </div>
+</section>
+
+<section class="section-tint">
+  <div class="section">
+    <h2>{{ home.stepsHeading }}</h2>
+    <p class="intro">{{ home.stepsIntro }}</p>
+    <div class="steps">
+      {% for step in home.steps %}
+      <div class="step">
+        <div class="step-num" aria-hidden="true">{{ loop.index }}</div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{ home.areasHeading }}</h2>
+  <p class="intro">{{ home.areasIntro }}</p>
+  <div class="areas-list">
+    {% for area in areas.list %}
+    <div class="area-row"><span class="area-code">{{ area.code }}</span><span class="area-places">{{ area.places }}</span></div>
+    {% endfor %}
+  </div>
+  <p class="areas-note">{{ home.areasNote }}</p>
+</section>

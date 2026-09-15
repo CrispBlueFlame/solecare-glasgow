@@ -1,0 +1,34 @@
+---
+layout: base.njk
+permalink: /services/index.html
+nav: services
+title: Services and Prices | Solecare Glasgow East
+description: Foot care services and prices for home visits across Glasgow East. Nail care, diabetic checks, corns and hard skin, ingrown toenails.
+---
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Services and prices</h1>
+    <p>Every visit includes travel within the areas we cover, and all equipment and materials used during your treatment. There are no extra charges.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="service-list">
+    {% for service in services.list %}
+    <div class="service-item">
+      <h3>{{ service.name }}</h3>
+      {% for para in service.detail %}
+      <p>{{ para }}</p>
+      {% endfor %}
+      <span class="service-price">&pound;{{ service.price }} <small>&nbsp;{{ service.duration }}</small></span>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="callout">
+    <h3>Booking for a family member?</h3>
+    <p>Many visits are arranged by sons and daughters on behalf of a parent. Just get in touch and let us know you are enquiring for someone else, and we will take it from there.</p>
+    <a href="/contact/" class="btn btn-primary">Make an Enquiry</a>
+  </div>
+</section>

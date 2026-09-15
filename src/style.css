@@ -1,0 +1,597 @@
+:root {
+  --primary:      #2e7d83;
+  --primary-dark: #1f5a5f;
+  --primary-bg:   #f0f7f7;
+  --text:         #1f1f1f;
+  --muted:        #4a4a4a;
+  --border:       #d4e3e4;
+  --r:            10px;
+  --ease:         0.2s ease;
+  --max:          1000px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Percentage, not a pixel value, so a visitor who has set a larger default
+   text size in their browser still gets it. 112.5% of a 16px default = 18px. */
+html {
+  font-size: 112.5%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  color: var(--text);
+  background: #fff;
+  line-height: 1.7;
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+a { color: var(--primary-dark); }
+ul { list-style: none; }
+svg { flex-shrink: 0; }
+
+/* hidden must win over the display values set on components below */
+[hidden] { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== SKIP LINK (accessibility) ===== */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--primary-dark);
+  color: #fff;
+  padding: 14px 24px;
+  z-index: 999;
+  font-weight: 600;
+}
+.skip-link:focus { left: 0; }
+
+/* ===== FOCUS STATES =====
+   Base rule covers every browser. The :focus:not(:focus-visible) rule is
+   dropped wholesale by browsers that do not understand :focus-visible
+   (Safari below 15.4), which leaves them with the always-on outline. */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+  outline: none;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ===== HEADER ===== */
+.site-header {
+  background: #fff;
+  border-bottom: 2px solid var(--border);
+}
+.header-top {
+  background: var(--primary-dark);
+  color: #fff;
+}
+/* Centred on phones and on a tablet held upright. Pushed to the right on
+   desktop and on a tablet turned sideways. */
+.header-top-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media (min-width: 901px) {
+  .header-top-inner { justify-content: flex-end; }
+}
+/* The icon and the number are one single large tap target. */
+.header-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  padding: 12px 24px;
+  min-height: 48px;
+}
+.header-phone:hover { text-decoration: underline; }
+.header-phone svg { width: 20px; height: 20px; }
+.header-phone span { margin-left: 0; }
+
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.logo {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 2.2rem;
+  color: var(--primary-dark);
+  line-height: 1.12;
+  text-decoration: none;
+}
+.logo span {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.nav-links { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.nav-links a {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  padding: 12px 16px;
+  border-radius: 6px;
+  transition: background var(--ease);
+}
+.nav-links a:hover { background: var(--primary-bg); }
+.nav-links a.active {
+  color: var(--primary-dark);
+  font-weight: 700;
+  background: var(--primary-bg);
+}
+
+/* ===== BUTTONS (large targets) ===== */
+.btn {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: var(--r);
+  border: 2px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: background var(--ease), border-color var(--ease);
+  line-height: 1.4;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-primary:disabled { background: var(--muted); cursor: default; }
+.btn-outline {
+  background: #fff;
+  color: var(--primary-dark);
+  border-color: var(--primary);
+}
+.btn-outline:hover { background: var(--primary-bg); }
+.btn-block { width: 100%; }
+
+/* ===== HERO (soft, welcoming) ===== */
+.hero {
+  background: var(--primary-bg);
+  padding: 72px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-inner { max-width: var(--max); margin: 0 auto; }
+.hero h1 {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  line-height: 1.25;
+  margin-bottom: 20px;
+  max-width: 18ch;
+}
+.hero p {
+  font-size: 1.2rem;
+  color: var(--muted);
+  max-width: 34rem;
+  margin-bottom: 36px;
+}
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.hero-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-decoration: none;
+  padding: 14px 4px;
+  min-height: 48px;
+}
+.hero-phone:hover { text-decoration: underline; }
+.hero-phone svg { width: 26px; height: 26px; }
+
+/* ===== SECTIONS ===== */
+.section { max-width: var(--max); margin: 0 auto; padding: 64px 24px; }
+.section-tint { background: var(--primary-bg); }
+.section h2 {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 16px;
+}
+.section > p.intro {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 40rem;
+  margin-bottom: 40px;
+}
+
+/* ===== SERVICE LIST (simple, readable) ===== */
+.service-list { display: grid; gap: 20px; margin-top: 8px; }
+.service-item {
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  padding: 28px 32px;
+  background: #fff;
+}
+.service-item h3 {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 10px;
+}
+.service-item p { font-size: 1.05rem; color: var(--muted); margin-bottom: 14px; }
+.service-item p:last-child { margin-bottom: 0; }
+.service-price {
+  display: inline-block;
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  background: var(--primary-bg);
+  padding: 8px 20px;
+  border-radius: 6px;
+}
+.service-price small { font-size: 0.85rem; font-weight: 500; color: var(--muted); }
+
+/* ===== STEPS ===== */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.step { text-align: left; }
+.step-num {
+  width: 52px; height: 52px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+.step h3 {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--primary-dark);
+}
+.step p { font-size: 1.02rem; color: var(--muted); }
+
+/* ===== AREAS LIST ===== */
+.areas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.area-row {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+}
+.area-code {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  min-width: 3.2rem;
+}
+.area-places { font-size: 1rem; color: var(--muted); }
+.areas-note { font-size: 1.05rem; color: var(--muted); }
+
+/* ===== ABOUT PAGE ===== */
+.prose { max-width: 42rem; }
+.prose p { font-size: 1.08rem; color: var(--muted); margin-bottom: 20px; }
+.prose p:last-child { margin-bottom: 0; }
+.placeholder-note {
+  background: #fff8e6;
+  border: 2px solid #f0d48a;
+  border-radius: var(--r);
+  padding: 16px 20px;
+  font-size: 0.95rem;
+  color: #6b5518;
+  margin-bottom: 32px;
+}
+.about-layout { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: start; }
+.about-photo {
+  background: var(--primary-bg);
+  border: 2px dashed var(--border);
+  border-radius: var(--r);
+  /* min-height is the fallback for Safari below 15, which ignores aspect-ratio */
+  min-height: 340px;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--muted);
+  text-align: center;
+  padding: 24px;
+}
+.about-photo svg { width: 56px; height: 56px; color: var(--primary); opacity: 0.35; }
+.about-photo p { font-size: 0.9rem; }
+.about-photo-img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--r);
+  border: 2px solid var(--border);
+}
+
+/* ===== ENQUIRY FORM ===== */
+.enquiry-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+.contact-block { display: grid; gap: 28px; margin-top: 28px; }
+.contact-row { display: flex; gap: 16px; align-items: flex-start; }
+.contact-row svg { width: 26px; height: 26px; color: var(--primary); margin-top: 4px; }
+.contact-row h3 {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--primary-dark);
+}
+.contact-row p { font-size: 1.05rem; color: var(--muted); }
+.contact-row a {
+  display: inline-block;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  padding: 4px 0;
+}
+.contact-row-note { margin-top: 8px; }
+
+#enquiry-form { margin-top: 28px; }
+.hidden-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form-group { margin-bottom: 24px; }
+.form-group label {
+  display: block;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.form-group .hint { font-weight: 400; color: var(--muted); font-size: 0.92rem; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 15px 18px;
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  font-family: inherit;
+  /* Must stay at or above 16px or iOS Safari zooms the page on focus */
+  font-size: 1.05rem;
+  color: var(--text);
+  background: #fff;
+  transition: border-color var(--ease);
+  -webkit-appearance: none;
+  appearance: none;
+}
+/* Restore a visible dropdown arrow after removing the native appearance */
+.form-group select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f5a5f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 22px 22px;
+  padding-right: 52px;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--primary); }
+.form-group textarea { min-height: 130px; resize: vertical; }
+.form-note { margin-top: 14px; font-size: 0.98rem; color: var(--muted); }
+.form-error {
+  margin-top: 16px;
+  padding: 16px 20px;
+  border-radius: var(--r);
+  background: #fdecea;
+  border: 2px solid #e5a49d;
+  color: #7c2820;
+  font-size: 1rem;
+}
+.form-error a { color: #7c2820; }
+
+.form-confirm {
+  background: #e8f5e9;
+  border: 2px solid #94ce97;
+  border-radius: var(--r);
+  padding: 32px;
+}
+.form-confirm h3 {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1b5e20;
+  margin-bottom: 10px;
+}
+.form-confirm p { font-size: 1.05rem; color: #2e5c31; }
+
+/* ===== CALLOUT ===== */
+.callout {
+  background: var(--primary-bg);
+  border-left: 5px solid var(--primary);
+  border-radius: var(--r);
+  padding: 28px 32px;
+  margin-top: 40px;
+}
+.callout h3 {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 10px;
+}
+.callout p { font-size: 1.05rem; color: var(--muted); margin-bottom: 20px; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ===== FLOATING CALL BUTTON ===== */
+.call-float {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  background: var(--primary);
+  color: #fff;
+  text-decoration: none;
+  padding: 16px 26px;
+  border-radius: 40px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+  z-index: 100;
+}
+.call-float:hover { background: var(--primary-dark); }
+.call-float svg { width: 22px; height: 22px; }
+/* Only applied once the script runs, so the button stays visible without JS */
+.call-float--managed {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px);
+  transition: opacity var(--ease), transform var(--ease), visibility var(--ease);
+}
+.call-float--managed.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  background: var(--primary-dark);
+  color: #fff;
+  padding: 48px 24px 24px;
+  margin-top: 40px;
+}
+.footer-inner {
+  max-width: var(--max);
+  margin: 0 auto 32px;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1.2fr;
+  gap: 40px;
+}
+.footer-col h4 {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  color: rgba(255,255,255,0.75);
+}
+.footer-col p { font-size: 1rem; color: rgba(255,255,255,0.8); }
+.footer-col ul { display: grid; gap: 4px; }
+.footer-col a {
+  display: inline-block;
+  color: rgba(255,255,255,0.85);
+  font-size: 1rem;
+  text-decoration: none;
+  padding: 8px 0;
+}
+.footer-col a:hover { color: #fff; text-decoration: underline; }
+.footer-logo {
+  font-family: 'Raleway', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.footer-copy {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+  font-size: 0.92rem;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 860px) {
+  .steps { grid-template-columns: 1fr; gap: 28px; }
+  .about-layout { grid-template-columns: 1fr; gap: 32px; }
+  .about-photo, .about-photo-img { max-width: 260px; }
+  .enquiry-layout { grid-template-columns: 1fr; gap: 40px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+  .hero h1 { font-size: 2rem; }
+}
+
+/* Below this the logo and the navigation stack, so both are centred */
+@media (max-width: 700px) {
+  .nav-inner { justify-content: center; text-align: center; padding: 18px 20px; }
+  .nav-links { justify-content: center; }
+}
+
+@media (max-width: 560px) {
+  html { font-size: 106.25%; }
+  /* Two even rows of two, rather than three items and a lonely fourth */
+  .nav-links {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .nav-links a { text-align: center; padding: 12px 8px; white-space: nowrap; }
+  .hero { padding: 48px 20px; }
+  .section { padding: 48px 20px; }
+  .service-item { padding: 24px 22px; }
+  .callout { padding: 24px 22px; }
+  .call-float {
+    left: 16px;
+    right: 16px;
+    justify-content: center;
+    bottom: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  /* Clear the pinned call button so it never covers the footer links */
+  .site-footer { padding-bottom: 104px; }
+}

@@ -1,0 +1,51 @@
+---
+layout: base.njk
+permalink: /about/index.html
+nav: about
+title: About | Solecare Glasgow East
+description: About the podiatrist behind Solecare Glasgow East, offering home visit foot care across the east end of Glasgow.
+---
+{% import "icons.njk" as icon %}
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>About</h1>
+    <p>{{ about.heroText }}</p>
+  </div>
+</section>
+
+<section class="section">
+
+  {% if about.showPlaceholderNote %}
+  <div class="placeholder-note">
+    <strong>Placeholder text.</strong> {{ about.placeholderNote }}
+  </div>
+  {% endif %}
+
+  <div class="about-layout">
+
+    {% if about.photo %}
+    <img class="about-photo-img" src="{{ about.photo }}" alt="{{ about.photoAlt }}" width="280" height="373">
+    {% else %}
+    <div class="about-photo">
+      {{ icon.person() }}
+      <p>Photograph to be added</p>
+    </div>
+    {% endif %}
+
+    <div class="prose">
+      {% for para in about.body %}
+      <p>{{ para }}</p>
+      {% endfor %}
+    </div>
+
+  </div>
+
+  <div class="callout">
+    <h3>{{ about.qualHeading }}</h3>
+    {% for line in about.qualLines %}
+    <p>{{ line }}</p>
+    {% endfor %}
+  </div>
+
+</section>

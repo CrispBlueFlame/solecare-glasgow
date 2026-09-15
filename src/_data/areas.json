@@ -1,0 +1,32 @@
+{
+  "list": [
+    {
+      "code": "G31",
+      "places": "Bridgeton, Calton"
+    },
+    {
+      "code": "G32",
+      "places": "Shettleston, Sandyhills, Carmyle"
+    },
+    {
+      "code": "G33",
+      "places": "Springboig, Carntyne, Cranhill"
+    },
+    {
+      "code": "G40",
+      "places": "Parkhead, Dalmarnock, Tollcross"
+    },
+    {
+      "code": "G69",
+      "places": "Baillieston, Garrowhill, Barlanark"
+    },
+    {
+      "code": "G71",
+      "places": "Uddingston, Viewpark, Tannochside"
+    },
+    {
+      "code": "G72",
+      "places": "Cambuslang, Newton, Rutherglen"
+    }
+  ]
+}

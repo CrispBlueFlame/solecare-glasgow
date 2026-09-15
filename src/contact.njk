@@ -1,0 +1,129 @@
+---
+layout: base.njk
+permalink: /contact/index.html
+nav: contact
+pageScript: /js/enquiry.js
+title: Make an Enquiry | Solecare Glasgow East
+description: Get in touch about home visit foot care in Glasgow East. Call, email, or send an enquiry.
+---
+{% import "icons.njk" as icon %}
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Make an enquiry</h1>
+    <p>There is no obligation. Get in touch, ask whatever you need to ask, and we will take it from there. Calling is often easiest, but the form below works just as well.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="enquiry-layout">
+
+    <div>
+      <h2>Ways to get in touch</h2>
+      <div class="contact-block">
+
+        <div class="contact-row">
+          {{ icon.phone() }}
+          <div>
+            <h3>By telephone</h3>
+            <a href="tel:{{ site.phone | telLink }}">{{ site.phone }}</a>
+            <p>{{ site.hours }}. {{ site.phoneNote }}</p>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          {{ icon.mail() }}
+          <div>
+            <h3>By email</h3>
+            <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+            <p>{{ site.emailNote }}</p>
+          </div>
+        </div>
+
+        <div class="contact-row">
+          {{ icon.pin() }}
+          <div>
+            <h3>Areas visited</h3>
+            <p>{% for area in areas.list %}{{ area.code }}{% if not loop.last %}, {% endif %}{% endfor %}. Covering {% for area in areas.list %}{{ area.places.split(",")[0] }}{% if loop.revindex0 == 1 %} and {% elif not loop.last %}, {% endif %}{% endfor %}, and the surrounding areas.</p>
+            <p class="contact-row-note">If your area is not listed, please still ask.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div>
+      <h2>Send an enquiry</h2>
+
+      <form id="enquiry-form" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contact/">
+        <input type="hidden" name="form-name" value="enquiry">
+        <p class="hidden-field">
+          <label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+        </p>
+
+        <div class="form-group">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" autocomplete="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Telephone number</label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address <span class="hint">(optional)</span></label>
+          <input type="email" id="email" name="email" autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="area">Which area do you live in? <span class="hint">(a postcode or place name is fine)</span></label>
+          <input type="text" id="area" name="area" autocomplete="postal-code">
+        </div>
+
+        <div class="form-group">
+          <label for="reason">What can we help with?</label>
+          <select id="reason" name="reason">
+            <option value="">Please choose one</option>
+            {% for service in services.list %}
+            <option>{{ service.name }}</option>
+            {% endfor %}
+            <option>I am not sure yet</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Anything else you would like to tell us? <span class="hint">(optional)</span></label>
+          <textarea id="message" name="message" placeholder="For example, any health conditions, mobility difficulties, or questions you have."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Send Enquiry</button>
+        <p class="form-note">We aim to reply within one working day. Your details are only used to respond to your enquiry.</p>
+        <p class="form-error" id="enquiry-error" role="alert" hidden>
+          Sorry, something went wrong sending your enquiry. Please call {{ site.phone }} or email
+          <a href="mailto:{{ site.email }}">{{ site.email }}</a> instead.
+        </p>
+      </form>
+
+      <div id="enquiry-confirm" class="form-confirm" tabindex="-1" hidden>
+        <h3>Thank you, your enquiry has been sent.</h3>
+        <p>We will be in touch within one working day. If it is urgent, please call {{ site.phone }}.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section-tint">
+  <div class="section">
+    <h2>Questions people often ask</h2>
+    <div class="service-list">
+      {% for faq in faqs.list %}
+      <div class="service-item">
+        <h3>{{ faq.question }}</h3>
+        <p>{{ faq.answer }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

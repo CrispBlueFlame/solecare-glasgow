@@ -1,0 +1,79 @@
+{% import "icons.njk" as icon %}<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ description }}">
+  <meta name="theme-color" content="#1f5a5f">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-top-inner">
+      <a href="tel:{{ site.phone | telLink }}" class="header-phone" aria-label="Call us on {{ site.phone }}">
+        {{ icon.phone() }}
+        <span>{{ site.phone }}</span>
+      </a>
+    </div>
+  </div>
+  <div class="nav-inner">
+    <a href="/" class="logo">{{ site.nameMain }}<span>{{ site.nameSub }}</span></a>
+    <nav aria-label="Main navigation">
+      <ul class="nav-links">
+        <li><a href="/"{% if nav == "home" %} class="active" aria-current="page"{% endif %}>Home</a></li>
+        <li><a href="/services/"{% if nav == "services" %} class="active" aria-current="page"{% endif %}>Services</a></li>
+        <li><a href="/about/"{% if nav == "about" %} class="active" aria-current="page"{% endif %}>About</a></li>
+        <li><a href="/contact/"{% if nav == "contact" %} class="active" aria-current="page"{% endif %}>Make an Enquiry</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+{{ content | safe }}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-logo">{{ site.fullName }}</div>
+      <p>{{ site.footerBlurb }}</p>
+    </div>
+    <div class="footer-col">
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/contact/">Make an Enquiry</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Get in touch</h4>
+      <ul>
+        <li><a href="tel:{{ site.phone | telLink }}">{{ site.phone }}</a></li>
+        <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+      </ul>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; {{ site.footerCredit }}</p>
+</footer>
+
+<a href="tel:{{ site.phone | telLink }}" class="call-float">
+  {{ icon.phone() }}
+  Call us
+</a>
+
+<script src="/js/site.js" defer></script>
+{% if pageScript %}<script src="{{ pageScript }}" defer></script>{% endif %}
+</body>
+</html>
