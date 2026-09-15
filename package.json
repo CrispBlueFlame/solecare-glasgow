@@ -6,6 +6,7 @@
   "scripts": {
     "start": "eleventy --serve --port=8202",
     "build": "eleventy",
+    "build:pages": "eleventy --pathprefix=/solecare-glasgow/",
     "clean": "rm -rf _site"
   },
   "devDependencies": {

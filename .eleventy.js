@@ -1,4 +1,13 @@
+const { HtmlBasePlugin } = require("@11ty/eleventy");
+
 module.exports = function (eleventyConfig) {
+
+  // Every link in the templates is written from the root, for example
+  // /services/. That is correct when the site sits on its own domain, which
+  // is where it will end up. The GitHub preview address puts it in a
+  // subfolder instead, so this plugin rewrites those links to match whatever
+  // --pathprefix the build was given. No prefix given, nothing changes.
+  eleventyConfig.addPlugin(HtmlBasePlugin);
 
   // Copy static assets straight through, untouched by the template engine.
   eleventyConfig.addPassthroughCopy("src/style.css");

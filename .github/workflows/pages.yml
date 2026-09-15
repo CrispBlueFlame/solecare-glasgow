@@ -1,0 +1,62 @@
+# Builds the site and publishes it to the GitHub preview address.
+#
+# The website is written as templates in src/. Those are not web pages yet,
+# so GitHub cannot serve them directly. This runs the build first, then
+# publishes the finished pages it produces.
+#
+# Runs automatically on every push to main, which includes the changes your
+# mum saves in the admin panel.
+
+name: Build and publish the site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# If two pushes land close together, let the newer one finish rather than
+# cancelling it partway through a publish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # The preview address is crispblueflame.github.io/solecare-glasgow/,
+      # so the site lives in a subfolder rather than at the root. The prefix
+      # tells the build to write its links to match. On a real domain later
+      # this is dropped and the links go back to normal.
+      - name: Build
+        run: npm run build:pages
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
