@@ -205,6 +205,9 @@ textarea:focus-visible {
   gap: 12px;
   margin-top: 16px;
 }
+/* Both buttons share the space equally instead of each sizing to its own
+   label, so they stay matched whether they sit side by side or stack. The
+   cap stops them stretching to silly widths in a wide column. */
 .btn-msg {
   display: inline-flex;
   align-items: center;
@@ -212,6 +215,8 @@ textarea:focus-visible {
   gap: 10px;
   padding: 14px 24px;
   min-height: 48px;
+  flex: 1 1 150px;
+  max-width: 220px;
 }
 .btn-msg svg { width: 20px; height: 20px; }
 
@@ -393,7 +398,10 @@ textarea:focus-visible {
 .enquiry-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
 .contact-block { display: grid; gap: 28px; margin-top: 28px; }
 .contact-row { display: flex; gap: 16px; align-items: flex-start; }
-.contact-row svg { width: 26px; height: 26px; color: var(--primary); margin-top: 4px; }
+/* Direct child only. The buttons further down the row carry their own icons,
+   and without the > they inherited this size and this colour, which put a
+   teal WhatsApp mark on a green button. */
+.contact-row > svg { width: 26px; height: 26px; color: var(--primary); margin-top: 4px; }
 .contact-row h3 {
   font-family: 'Raleway', system-ui, sans-serif;
   font-size: 1.1rem;
@@ -402,7 +410,9 @@ textarea:focus-visible {
   color: var(--primary-dark);
 }
 .contact-row p { font-size: 1.05rem; color: var(--muted); }
-.contact-row a {
+/* The plain number and address links only. Buttons live deeper in the row and
+   need to keep their own colour, which a bare .contact-row a was overriding. */
+.contact-row > div > a {
   display: inline-block;
   font-size: 1.15rem;
   font-weight: 600;
