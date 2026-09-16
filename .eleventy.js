@@ -22,6 +22,15 @@ module.exports = function (eleventyConfig) {
     String(value || "").replace(/[^0-9+]/g, "")
   );
 
+  // WhatsApp needs the number in international form with no symbols, so a
+  // UK mobile typed as 07700 000000 has to go out as 447700000000.
+  eleventyConfig.addFilter("waLink", (value) => {
+    let n = String(value || "").replace(/[^0-9+]/g, "");
+    if (n.startsWith("+")) n = n.slice(1);
+    if (n.startsWith("0")) n = "44" + n.slice(1);
+    return n;
+  });
+
   // The admin panel is copied verbatim, never run through the template engine.
   eleventyConfig.ignores.add("src/admin/**");
 

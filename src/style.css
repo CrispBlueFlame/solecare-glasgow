@@ -194,13 +194,37 @@ textarea:focus-visible {
 .btn-outline:hover { background: var(--primary-bg); }
 .btn-block { width: 100%; }
 
+/* WhatsApp's own green, so the button is recognised at a glance. */
+.btn-whatsapp { background: #1f8f4e; color: #fff; }
+.btn-whatsapp:hover { background: #17703d; }
+
+/* Text and WhatsApp sit side by side, and stack once there is no room. */
+.message-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+.btn-msg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  min-height: 48px;
+}
+.btn-msg svg { width: 20px; height: 20px; }
+
 /* ===== HERO (soft, welcoming) ===== */
+/* The tint spans the full width, so the band itself carries no side padding.
+   The inset lives on .hero-inner instead, which is what lines the heading up
+   with the logo above it and the cards below it. */
 .hero {
   background: var(--primary-bg);
-  padding: 72px 24px;
+  padding: 72px 0;
   border-bottom: 1px solid var(--border);
 }
-.hero-inner { max-width: var(--max); margin: 0 auto; }
+.hero-inner { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
 .hero h1 {
   font-family: 'Raleway', system-ui, sans-serif;
   font-size: 2.4rem;
@@ -306,6 +330,7 @@ textarea:focus-visible {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
+  list-style: none;
 }
 .area-row {
   display: flex;
@@ -321,10 +346,9 @@ textarea:focus-visible {
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--primary-dark);
-  min-width: 3.2rem;
+  min-width: 3.4rem;
 }
 .area-places { font-size: 1rem; color: var(--muted); }
-.areas-note { font-size: 1.05rem; color: var(--muted); }
 
 /* ===== ABOUT PAGE ===== */
 .prose { max-width: 42rem; }
@@ -385,7 +409,6 @@ textarea:focus-visible {
   color: var(--primary-dark);
   padding: 4px 0;
 }
-.contact-row-note { margin-top: 8px; }
 
 #enquiry-form { margin-top: 28px; }
 .hidden-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -457,6 +480,7 @@ textarea:focus-visible {
 .callout {
   background: var(--primary-bg);
   border-left: 5px solid var(--primary);
+  border-right: 5px solid var(--primary);
   border-radius: var(--r);
   padding: 28px 32px;
   margin-top: 40px;
@@ -509,12 +533,13 @@ textarea:focus-visible {
 .site-footer {
   background: var(--primary-dark);
   color: #fff;
-  padding: 48px 24px 24px;
+  padding: 48px 0 24px;
   margin-top: 40px;
 }
 .footer-inner {
   max-width: var(--max);
   margin: 0 auto 32px;
+  padding: 0 24px;
   display: grid;
   grid-template-columns: 1.6fr 1fr 1.2fr;
   gap: 40px;
@@ -548,11 +573,21 @@ textarea:focus-visible {
 .footer-copy {
   max-width: var(--max);
   margin: 0 auto;
-  padding-top: 24px;
-  border-top: 1px solid rgba(255,255,255,0.18);
+  padding: 24px 24px 0;
+  position: relative;
   font-size: 0.92rem;
   color: rgba(255,255,255,0.6);
   text-align: center;
+}
+/* Drawn inside the padding rather than as a border on the box, so the dividing
+   line stops level with the footer columns instead of running past them. */
+.footer-copy::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  border-top: 1px solid rgba(255,255,255,0.18);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -581,8 +616,13 @@ textarea:focus-visible {
     gap: 8px;
   }
   .nav-links a { text-align: center; padding: 12px 8px; white-space: nowrap; }
-  .hero { padding: 48px 20px; }
+  /* Narrower inset on a phone, applied to every band so they stay in line */
+  .hero { padding: 48px 0; }
+  .hero-inner { padding: 0 20px; }
   .section { padding: 48px 20px; }
+  .footer-inner { padding: 0 20px; }
+  .footer-copy { padding: 24px 20px 0; }
+  .footer-copy::before { left: 20px; right: 20px; }
   .service-item { padding: 24px 22px; }
   .callout { padding: 24px 22px; }
   .call-float {

@@ -2,31 +2,35 @@
   "list": [
     {
       "code": "G31",
-      "places": "Bridgeton, Calton"
+      "places": "Parkhead, Dennistoun, Haghill"
     },
     {
       "code": "G32",
-      "places": "Shettleston, Sandyhills, Carmyle"
+      "places": "Shettleston, Tollcross, Mount Vernon"
     },
     {
-      "code": "G33",
-      "places": "Springboig, Carntyne, Cranhill"
-    },
-    {
-      "code": "G40",
-      "places": "Parkhead, Dalmarnock, Tollcross"
+      "code": "G34",
+      "places": "Easterhouse, Wellhouse"
     },
     {
       "code": "G69",
-      "places": "Baillieston, Garrowhill, Barlanark"
+      "places": "Baillieston, Bargeddie, Garrowhill, Swinton"
     },
     {
       "code": "G71",
-      "places": "Uddingston, Viewpark, Tannochside"
+      "places": "Uddingston, Bothwell, Viewpark, Tannochside"
     },
     {
       "code": "G72",
-      "places": "Cambuslang, Newton, Rutherglen"
+      "places": "Cambuslang, Halfway, Newton"
+    },
+    {
+      "code": "G73",
+      "places": "Rutherglen, Burnside"
+    },
+    {
+      "code": "ML5",
+      "places": "Coatbridge, Whifflet, Blairhill"
     }
   ]
 }

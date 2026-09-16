@@ -33,9 +33,11 @@ collections:
         description: "Your phone number and email address. Changing them here updates them everywhere on the website at once."
         fields:
           - { label: "Phone number", name: "phone", widget: "string", hint: "Write it the way you want people to read it, for example 07700 000000" }
+          - { label: "Mobile number for texts and WhatsApp", name: "mobile", widget: "string", hint: "The mobile that receives texts. Write it normally, for example 07700 000000" }
           - { label: "Email address", name: "email", widget: "string" }
           - { label: "Opening hours", name: "hours", widget: "string", hint: "For example: Monday to Friday, 9am to 5pm" }
           - { label: "Note under the phone number", name: "phoneNote", widget: "text" }
+          - { label: "Note under the text and WhatsApp number", name: "messageNote", widget: "text" }
           - { label: "Note under the email address", name: "emailNote", widget: "text" }
           - { label: "Business name", name: "fullName", widget: "string" }
           - { label: "Name, first part", name: "nameMain", widget: "string", hint: "The large part of the logo, for example Solecare" }
@@ -73,7 +75,7 @@ collections:
       - name: list
         label: "Areas you visit"
         file: "src/_data/areas.json"
-        description: "The postcodes and places listed on the home page and the enquiry page."
+        description: "The postcodes and places listed on the home page."
         fields:
           - label: "Areas"
             name: "list"
@@ -81,8 +83,8 @@ collections:
             label_singular: "Area"
             summary: "{{fields.code}} - {{fields.places}}"
             fields:
-              - { label: "Postcode", name: "code", widget: "string", hint: "For example G31" }
-              - { label: "Places in that postcode", name: "places", widget: "string", hint: "Separated by commas, for example: Bridgeton, Calton" }
+              - { label: "Postcode", name: "code", widget: "string", hint: "For example G69" }
+              - { label: "Places in that postcode", name: "places", widget: "string", hint: "Separated by commas, for example: Baillieston, Bargeddie, Garrowhill" }
 
   - name: about
     label: "About page"
@@ -152,4 +154,3 @@ collections:
               - { label: "Step text", name: "text", widget: "text" }
           - { label: "'Areas we visit' heading", name: "areasHeading", widget: "string" }
           - { label: "'Areas we visit' introduction", name: "areasIntro", widget: "text" }
-          - { label: "Note under the areas list", name: "areasNote", widget: "text" }
