@@ -46,15 +46,17 @@ def bold_body(doc, label, body):
     r2.font.size = Pt(10)
     r2.font.color.rgb = TEXT_C
 
-def risk_table(doc, risks):
+def risk_table(doc, risks, widths=None):
     """
     risks: list of (hazard, who, controls, likelihood, severity, risk_level, additional)
+    widths: optional list of 7 Cm() values — defaults to portrait; pass landscape widths when building that doc.
     """
+    if widths is None:
+        widths = [Cm(3), Cm(2.2), Cm(4.5), Cm(1), Cm(1), Cm(1), Cm(3.8)]
     tbl = doc.add_table(rows=0, cols=7)
     tbl.style = 'Table Grid'
     hdr = tbl.add_row()
-    headers = ['Hazard', 'Who at risk', 'Existing controls', 'L\n(1-3)', 'S\n(1-3)', 'Risk\n(LxS)', 'Additional action']
-    widths = [Cm(3), Cm(2.2), Cm(4.5), Cm(1), Cm(1), Cm(1), Cm(3.8)]
+    headers = ['Hazard', 'Who at risk', 'Existing controls', 'L\n(1-3)', 'S\n(1-3)', 'Risk\n(LxS)', 'Additional action / review']
     for i, (h, w) in enumerate(zip(headers, widths)):
         c = hdr.cells[i]
         shade_cell(c, hex_str(TEAL))
@@ -257,103 +259,283 @@ def build_ipc_policy():
 
 
 # ════════════════════════════════════════════════════════════════════════════
-# HEALTH AND SAFETY RISK ASSESSMENT
+# HEALTH AND SAFETY RISK ASSESSMENT  (A4 landscape)
 # ════════════════════════════════════════════════════════════════════════════
 def build_risk_assessment():
     doc = a4_doc()
+
+    # ── Override to A4 landscape ─────────────────────────────────────────────
+    section = doc.sections[0]
+    section.page_width   = Cm(29.7)
+    section.page_height  = Cm(21)
+    section.left_margin  = Cm(1.5)
+    section.right_margin = Cm(1.5)
+    section.top_margin   = Cm(1.5)
+    section.bottom_margin = Cm(1.5)
+    sectPr = section._sectPr
+    pgSz = sectPr.find(qn('w:pgSz'))
+    if pgSz is None:
+        pgSz = OxmlElement('w:pgSz')
+        sectPr.append(pgSz)
+    pgSz.set(qn('w:orient'), 'landscape')
+
+    # Usable width: 29.7 - 3 = 26.7 cm
+    # Risk table column widths summing to 26.7 cm:
+    LS_WIDTHS = [Cm(4.5), Cm(2.8), Cm(10.5), Cm(1.1), Cm(1.1), Cm(1.1), Cm(5.6)]
+
     add_doc_title(doc, "Solecare Glasgow — Health and Safety Risk Assessment",
-        "HSWA 1974  |  MHSWR 1999  |  COSHH 2002  |  Manual Handling Operations Regulations 1992  |  HSE INDG73")
+        "HSWA 1974  |  MHSWR 1999  |  COSHH 2002  |  Manual Handling Operations Regulations 1992  |  HSE INDG73  |  Sharps Regulations 2013")
 
     notice_box(doc,
-        "Risk scoring: Likelihood (L) 1=unlikely, 2=possible, 3=likely  |  "
-        "Severity (S) 1=minor, 2=moderate, 3=serious  |  "
-        "Risk = L x S  |  1-2 = Low (green)  |  3-4 = Medium (amber)  |  6-9 = High (red — immediate action)")
+        "Risk scoring  —  Likelihood (L): 1 = unlikely, 2 = possible, 3 = likely  |  "
+        "Severity (S): 1 = minor injury/near-miss, 2 = moderate harm, 3 = serious harm or death  |  "
+        "Risk rating = L × S  |  Score 1-2 = LOW (acceptable)  |  3-4 = MEDIUM (monitor, review controls)  |  6-9 = HIGH (immediate action required)")
 
     form_table(doc, [
-        ("Practitioner:", ""),
-        ("Practice type:", "Mobile sole-trader domiciliary podiatry — single-use instruments"),
+        ("Practitioner name:", ""),
+        ("HCPC registration no.:", ""),
+        ("Practice type:", "Mobile sole-trader, domiciliary house calls, single-use instruments only"),
         ("Assessment date:", ""),
-        ("Next review date:", "Annual, or after any incident or significant change in practice"),
+        ("Next review date:", "Annual minimum, or after any incident, near-miss, or significant change"),
     ])
 
-    add_section_heading(doc, "Section A — General and Domiciliary Hazards")
+    # ── Section A ─────────────────────────────────────────────────────────────
+    add_section_heading(doc, "Section A — Clinical and Domiciliary Environment Hazards")
     add_teal_rule(doc)
     risks_a = [
-        ("Sharps injury — scalpel blades, needles",
-         "Practitioner", "Single-use only. Dispose at point of use into UN3291 sharps bin. Never resheath. Written protocol.", 1, 3, 3, "Annual sharps protocol review"),
-        ("Blood/body fluid exposure",
-         "Practitioner", "PPE: gloves + apron + mask/eye protection for surgical procedures. Spill kit carried. Post-exposure protocol documented.", 1, 3, 3, "BBV immunisation confirmed"),
-        ("Infection — patient cross-contamination",
-         "Patient, Practitioner", "SICPs at all visits. Single-use instruments. Clean field. Pre-visit screening call. Full IPC policy in place.", 1, 3, 3, "Annual IPC policy review"),
-        ("Unstable seating / working posture (domiciliary)",
-         "Practitioner", "Portable footrest and folding stool carried. Assess environment on arrival. Do not treat from floor.", 2, 2, 4, "MSK check-in annually"),
-        ("Manual handling — equipment transport",
-         "Practitioner", "Kit bag weight target under 15 kg. Use rucksack (two-shoulder carry). Heavy items carried separately.", 2, 2, 4, "Weigh kit quarterly"),
-        ("Trip hazards in patient home (rugs, cables, pets, clutter)",
-         "Practitioner", "Dynamic risk assessment on arrival. Request clear pathway to treatment area. Move obstacles before treating.", 2, 1, 2, "Record at-risk premises"),
-        ("Poor lighting in patient home",
-         "Practitioner, Patient", "Carry portable examination light for inadequate-lighting environments.", 2, 2, 4, "Check light at each visit"),
-        ("Aggressive or unexpected behaviour — patient or household",
-         "Practitioner", "Pre-visit screening call for new patients. Flagged patients register maintained. Lone worker check-in system active.", 1, 3, 3, "De-escalation training"),
-        ("Aggressive pets",
-         "Practitioner", "Ask at booking whether pets are present. Request pets are secured before visit. Add to flagged register.", 2, 2, 4, "Update register after each visit"),
-        ("Practitioner medical emergency (no colleague present)",
-         "Practitioner", "Lone worker check-in system — emergency contact has schedule and escalation steps. Mobile phone always charged and accessible.", 1, 3, 3, "Annual emergency review"),
-    ]
-    risk_table(doc, risks_a)
+        ("Sharps injury — scalpel blades, needles, lancets",
+         "Practitioner",
+         "Single-use instruments only. Dispose directly into UN3291-compliant yellow-lidded sharps bin at point of use — never set down first. "
+         "Never resheath needles. Never pass sharps between hands. Carry portable sharps bin to every visit. "
+         "Refer to written Sharps Protocol (Sharps_Protocol.docx).",
+         1, 3, 3,
+         "Annual review of sharps protocol. Hep B immunity confirmed on file. Post-injury BBV protocol documented."),
 
-    add_section_heading(doc, "Section B — Vehicle and Waste Transport Hazards")
+        ("Blood or body fluid exposure — splash or contact",
+         "Practitioner",
+         "Gloves and apron worn at all times. Type IIR mask and eye protection added for nail surgery and any splash-risk procedure. "
+         "Carry spill kit to every visit (absorbent granules, 10,000 ppm hypochlorite wipes, face shield, heavy gloves, clinical waste bag). "
+         "Post-exposure protocol: wash immediately, encourage bleeding, cover, seek BBV advice within 1 hour.",
+         1, 3, 3,
+         "BBV immunisation on file. Incident_Log.xlsx completed for each event."),
+
+        ("Cross-infection between patients",
+         "Patient, Practitioner",
+         "Standard Infection Control Precautions (SICPs) applied at every visit per NHS NIPCM v2.10. "
+         "Single-use sterile instruments from licensed medical device supplier. Disposable paper drape clean field before each treatment. "
+         "PPE changed between patients. Pre-visit screening call for any reported household illness.",
+         1, 3, 3,
+         "Annual IPC policy review and re-signature. IPC CPD logged annually."),
+
+        ("Infection risk — nail surgery in domestic setting",
+         "Patient, Practitioner",
+         "0.5% chlorhexidine in 70% isopropyl alcohol (ChloraPrep or equivalent) applied to surgical site per NICE NG125. "
+         "Minimum 30 seconds air-dry before incision — do not blot. Sterile drape applied. Adequate lighting confirmed before proceeding. "
+         "Do not perform nail surgery in environments where a sterile field cannot be maintained.",
+         2, 3, 6,
+         "Document pre-surgery environment assessment for each home surgery episode. Check PI insurer covers domiciliary nail surgery."),
+
+        ("Unstable or unsafe working posture — patient seating",
+         "Practitioner",
+         "Portable folding stool and adjustable footrest carried to every visit. "
+         "Practitioner never treats from the floor. "
+         "If suitable seating cannot be established, reschedule and note in patient record.",
+         2, 2, 4,
+         "Annual MSK self-assessment. Ergonomics reviewed at each new patient address."),
+
+        ("Manual handling — transporting equipment to and from vehicle",
+         "Practitioner",
+         "Total kit weight target: under 15 kg. Rucksack used for even two-shoulder load distribution. "
+         "Heavy items (sharps waste box, folding stool) carried separately and not combined with clinical bag. "
+         "Practitioner does not carry kit and climb stairs simultaneously.",
+         2, 2, 4,
+         "Weigh kit quarterly. Reassess if new items added."),
+
+        ("Trip or slip hazards in patient's home (rugs, cables, pets, clutter, wet floors)",
+         "Practitioner",
+         "Dynamic risk assessment conducted on arrival at every home visit before entering treatment area. "
+         "Request clear pathway from door to treatment area at booking. "
+         "Move portable trip hazards (mats, cables) before beginning treatment. "
+         "Wet floor — ask patient to dry before proceeding.",
+         2, 2, 4,
+         "Flagged-premises register maintained for repeat-visit hazards."),
+
+        ("Poor or insufficient lighting in patient's home",
+         "Practitioner, Patient",
+         "Portable LED examination light (rechargeable) carried to all visits. "
+         "Do not perform nail surgery if lighting is inadequate and cannot be supplemented.",
+         2, 2, 4,
+         "Check battery charge before each working day."),
+
+        ("Aggressive, threatening, or unexpected behaviour — patient or household member",
+         "Practitioner",
+         "Pre-visit telephone screening call for all new patients. "
+         "Lone worker check-in system active — emergency contact has schedule and knows escalation steps. "
+         "Flagged patients register updated after any concerning behaviour. "
+         "Exit strategy: practitioner seats self nearest door, keeps kit bag between self and patient.",
+         1, 3, 3,
+         "Conflict de-escalation training (Suzy Lamplugh Trust or equivalent). Annual review of flagged register."),
+
+        ("Aggressive or uncontrolled pets",
+         "Practitioner",
+         "Ask at booking: 'Do you have pets?' Request all pets are secured before practitioner enters. "
+         "If pets cannot be secured on arrival, reschedule appointment. Add to flagged premises register.",
+         2, 2, 4,
+         "Flagged premises register updated at each visit."),
+
+        ("Practitioner medical emergency with no colleague present",
+         "Practitioner",
+         "Lone worker check-in system operational every working day. "
+         "Emergency contact has current-day movement log including all patient addresses, appointment times, and escalation steps. "
+         "Mobile phone fully charged and accessible throughout each visit.",
+         1, 3, 3,
+         "Test escalation procedure annually. Update emergency contact if circumstances change."),
+    ]
+    risk_table(doc, risks_a, LS_WIDTHS)
+
+    # ── Section B ─────────────────────────────────────────────────────────────
+    add_section_heading(doc, "Section B — Vehicle, Medicines, and Clinical Waste Transport Hazards")
     add_teal_rule(doc)
     risks_b = [
-        ("Clinical waste unsecured in vehicle",
-         "Public, Practitioner", "Rigid lockable outer transport box in boot. Sharps in sealed UN3291 container inside box. Never loose bags in vehicle.", 1, 3, 3, "Check before each journey"),
-        ("Local anaesthetic temperature excursion (>25°C)",
-         "Patient", "Insulated medicines bag in vehicle. Temperature log maintained. Never left in hot vehicle unattended.", 2, 2, 4, "Seasonal check of bag efficacy"),
-        ("Road traffic collision during clinical waste transport",
-         "Public, Practitioner", "Lower Tier EA waste carrier registered. ADR 1.3 training completed. 2kg dry powder fire extinguisher in vehicle.", 1, 3, 3, "Annual insurance review"),
-        ("Contamination of clean supplies",
-         "Patient", "Separate labelled containers for clean and contaminated items. Never mixed.", 1, 3, 3, "Check segregation system weekly"),
-    ]
-    risk_table(doc, risks_b)
+        ("Clinical waste unsecured or unsealed in vehicle",
+         "Public, Practitioner",
+         "All sealed sharps bins and clinical waste bags carried inside a rigid, lockable, leak-proof outer transport box in vehicle boot. "
+         "Loose bags directly in boot are prohibited under ADR and EA duty of care. "
+         "Transport box locked when vehicle is unattended.",
+         1, 3, 3,
+         "Check transport box integrity before each journey. ADR 1.3 training certificate held on file."),
 
-    add_section_heading(doc, "Section C — Lone Worker Specific Hazards")
+        ("Local anaesthetic temperature excursion above 25°C (SmPC limit)",
+         "Patient",
+         "Local anaesthetics transported in a validated insulated medicines bag at all times during vehicle journeys. "
+         "Bag is never left in an unshaded vehicle in warm weather. "
+         "Temperature log maintained in Medicines_Log.xlsx. Any product exposed to >25°C for extended periods is not used.",
+         2, 2, 4,
+         "Insulated bag efficacy re-assessed each spring/summer. Any temperature excursion logged and pharmacist consulted."),
+
+        ("Road traffic collision while transporting clinical waste",
+         "Public, Practitioner",
+         "Lower Tier Environment Agency waste carrier registration held (wastecarriersregistration.service.gov.uk). "
+         "ADR 1.3 general awareness training completed and certificated. "
+         "2 kg dry powder fire extinguisher carried in vehicle whenever clinical waste is transported. "
+         "Car insurance confirmed as Class 3 business use with clinical waste transport declared.",
+         1, 3, 3,
+         "Annual insurance renewal with clinical waste transport re-declared. Fire extinguisher serviced annually."),
+
+        ("Cross-contamination of clean supplies by used/contaminated items",
+         "Patient",
+         "Strict clean/dirty segregation in vehicle: dedicated lidded box for clean sterile supplies; "
+         "separate sealed container for used/contaminated items. Containers labelled clearly. Never mixed.",
+         1, 2, 2,
+         "Segregation system checked before each working day."),
+
+        ("Theft or loss of medicines from unattended vehicle",
+         "Public",
+         "Medicines are not left in an unattended vehicle. Lockable insulated bag transferred to practitioner's person or secured premises when vehicle is left. "
+         "Local anaesthetics are not controlled drugs but are Prescription Only Medicines — access must be controlled.",
+         1, 2, 2,
+         "Check vehicle is locked and medicines removed at each stop."),
+    ]
+    risk_table(doc, risks_b, LS_WIDTHS)
+
+    # ── Section C ─────────────────────────────────────────────────────────────
+    add_section_heading(doc, "Section C — Lone Worker and Personal Safety Hazards  (HSE INDG73)")
     add_teal_rule(doc)
     risks_c = [
-        ("No colleague awareness of location",
-         "Practitioner", "Daily movement log shared with named emergency contact before first visit. Check-in after each patient. End-of-day confirmation.", 1, 3, 3, "Test escalation steps annually"),
-        ("Delayed check-in response — contact not available",
-         "Practitioner", "Emergency contact is a reliable named individual. Alternative emergency contact identified.", 1, 3, 3, "Review contact annually"),
-        ("Working in unfamiliar areas / late visits",
-         "Practitioner", "No lone visits after dark to unfamiliar addresses. Google Maps pre-checked. Park in visible location.", 2, 2, 4, ""),
+        ("No colleague awareness of practitioner location throughout the working day",
+         "Practitioner",
+         "Daily movement log (Daily_Movement_Log.xlsx) completed and shared with named emergency contact before first visit each day. "
+         "Includes all patient names/addresses, appointment times, and expected finish times. "
+         "Check-in message sent after each patient. End-of-day 'home safe' confirmation sent.",
+         1, 3, 3,
+         "Emergency contact briefed on escalation steps (Lone_Worker_Emergency.docx). Test procedure annually."),
+
+        ("Emergency contact unavailable or fails to respond to missed check-in",
+         "Practitioner",
+         "Primary emergency contact identified. Secondary emergency contact (alternative named person) identified as fallback. "
+         "Escalation steps define time intervals for each action, ending in 999 call if location unconfirmed.",
+         1, 3, 3,
+         "Review and update emergency contact details annually or if circumstances change."),
+
+        ("Working in unfamiliar areas, isolated addresses, or after dark",
+         "Practitioner",
+         "Route pre-planned using Google Maps before departure. "
+         "Appointments in unfamiliar or isolated areas scheduled during daylight hours only. "
+         "Vehicle parked in visible, well-lit location. Practitioner ID visible.",
+         2, 2, 4,
+         "Review visit scheduling policy annually."),
+
+        ("Lone working without medical support if practitioner becomes ill",
+         "Practitioner",
+         "Lone worker app (Lookout Call or MyTeamSafe) active throughout each working day — provides automated escalation if check-in is missed. "
+         "GP contact details on person. Medical emergency: call 999 if able, or trigger lone worker app alert.",
+         1, 3, 3,
+         "App subscription active and tested monthly."),
     ]
-    risk_table(doc, risks_c)
+    risk_table(doc, risks_c, LS_WIDTHS)
 
-    add_section_heading(doc, "COSHH — Substances used in practice")
+    # ── COSHH ─────────────────────────────────────────────────────────────────
+    add_section_heading(doc, "COSHH — Hazardous Substances Register  (COSHH Regulations 2002)")
     add_teal_rule(doc)
     body_para(doc,
-        "A separate COSHH assessment is completed for each hazardous substance using the manufacturer's Safety Data Sheet (SDS). "
-        "Substances requiring COSHH assessment in this practice include: "
-        "0.5% chlorhexidine in 70% isopropyl alcohol (skin prep); "
-        "sodium hypochlorite solution (spill disinfection); "
-        "surface disinfectant wipes (Clinell or equivalent); "
-        "alcohol-based hand rub; "
-        "local anaesthetic agents (lidocaine, etc.).")
-    note_para(doc, "COSHH assessments are filed separately. COSHHmate.co.uk is the recommended tool for generating assessments from SDS data.")
+        "A COSHH assessment is required for each hazardous substance used in this practice. "
+        "Obtain the Safety Data Sheet (SDS) from the manufacturer for each substance and assess: hazard, exposure route, control measures, PPE, and emergency action. "
+        "Use COSHHmate.co.uk (~£50/year) to auto-populate assessments from SDS data. Assessments are filed separately and reviewed annually.")
 
-    add_section_heading(doc, "Review and signature")
+    # COSHH substances table
+    coshh_rows = [
+        ("0.5% chlorhexidine gluconate in 70% isopropyl alcohol", "Nail surgery skin prep", "Flammable; eye/skin irritant", "Allow full air-dry before incision. Gloves. No ignition sources near application site."),
+        ("Sodium hypochlorite solution (10,000 ppm)", "Blood spill disinfection on hard surfaces", "Corrosive; harmful vapour; reacts with urine and acids", "Gloves, apron, face shield. Do not use on soft furnishings or urine spills. Ventilate area."),
+        ("Sodium hypochlorite solution (1,000 ppm) or detergent", "Spill management on soft furnishings / urine spills", "Low irritant at this concentration", "Gloves. Do not mix with higher concentration hypochlorite."),
+        ("Surface disinfectant wipes (e.g. Clinell Universal)", "General surface decontamination", "Skin/eye irritant", "Gloves. Allow contact time per manufacturer. Dispose as clinical waste."),
+        ("Alcohol-based hand rub (≥60% ethanol)", "Hand hygiene", "Flammable; drying to skin", "Store away from heat sources. Allow full evaporation before any open flame. Moisturise regularly."),
+        ("Lidocaine HCl injection (e.g. 1% or 2% solution)", "Local anaesthesia for nail surgery", "Systemic toxicity risk if overdosed or intravascular", "Check max dose per body weight. Aspirate before injection. Do not exceed single-procedure limits. Sharps disposal immediately post-use."),
+    ]
+    ctbl = doc.add_table(rows=0, cols=4)
+    ctbl.style = 'Table Grid'
+    ch = ctbl.add_row()
+    for i, h in enumerate(["Substance", "Used for", "Hazard summary", "Controls and PPE"]):
+        c = ch.cells[i]
+        shade_cell(c, hex_str(TEAL))
+        cell_border_all(c)
+        set_cell_margins(c, top=60, bottom=60, left=100, right=100)
+        p = c.paragraphs[0]
+        r = p.add_run(h)
+        r.font.name = 'Calibri'; r.font.size = Pt(9); r.font.bold = True; r.font.color.rgb = WHITE
+    cwidths = [Cm(5.5), Cm(4), Cm(5.5), Cm(11.7)]
+    for i, row_data in enumerate(coshh_rows):
+        row = ctbl.add_row()
+        trPr = row._tr.get_or_add_trPr()
+        trH = OxmlElement('w:trHeight')
+        trH.set(qn('w:val'), '400')
+        trH.set(qn('w:hRule'), 'atLeast')
+        trPr.append(trH)
+        bg = hex_str(BG) if i % 2 == 0 else 'FFFFFF'
+        for j, val in enumerate(row_data):
+            c = row.cells[j]
+            shade_cell(c, bg)
+            cell_border_all(c, color='D4E3E4')
+            set_cell_margins(c, top=60, bottom=60, left=100, right=100)
+            p = c.paragraphs[0]
+            r = p.add_run(val)
+            r.font.name = 'Calibri'; r.font.size = Pt(8); r.font.color.rgb = TEXT_C
+    for i, w in enumerate(cwidths):
+        ctbl.columns[i].width = w
+    doc.add_paragraph()
+    note_para(doc, "SDS documents held on file for each substance above. COSHH assessments filed separately at [location]. Review annually or when product changes.")
+
+    # ── Review and signature ──────────────────────────────────────────────────
+    add_section_heading(doc, "Signature and Review Log")
     add_teal_rule(doc)
     body_para(doc,
-        "This risk assessment must be reviewed: at least annually; after any incident, near-miss, or RIDDOR-reportable event; "
-        "after any significant change to practice, patient group, or working environment.")
-    signature_table(doc, [("Practitioner — assessment signature and date",)])
+        "Review triggers: annually as a minimum; after any RIDDOR-reportable event, near-miss, or significant incident; "
+        "after any change to working environment, patient group, or practice scope.")
+    signature_table(doc, [("Practitioner — initial assessment signature and date",)])
 
-    # Blank review log table
-    add_section_heading(doc, "Review log")
-    add_teal_rule(doc)
-    rl = doc.add_table(rows=0, cols=3)
+    rl = doc.add_table(rows=0, cols=4)
     rl.style = 'Table Grid'
     rh = rl.add_row()
-    for i, h in enumerate(["Review date", "Changes made", "Signature"]):
+    for i, h in enumerate(["Review date", "Trigger for review", "Changes made to assessment", "Signature"]):
         c = rh.cells[i]
         shade_cell(c, hex_str(TEAL))
         cell_border_all(c)
@@ -361,23 +543,24 @@ def build_risk_assessment():
         p = c.paragraphs[0]
         r = p.add_run(h)
         r.font.name = 'Calibri'; r.font.size = Pt(9); r.font.bold = True; r.font.color.rgb = WHITE
-    for i in range(5):
+    for i in range(6):
         row = rl.add_row()
         trPr = row._tr.get_or_add_trPr()
         trH = OxmlElement('w:trHeight')
-        trH.set(qn('w:val'), '400')
+        trH.set(qn('w:val'), '440')
         trH.set(qn('w:hRule'), 'atLeast')
         trPr.append(trH)
-        for j in range(3):
+        for j in range(4):
             c = row.cells[j]
             shade_cell(c, hex_str(BG) if i % 2 == 0 else 'FFFFFF')
             cell_border_all(c, color='D4E3E4')
             set_cell_margins(c, top=60, bottom=60, left=100, right=100)
-    rl.columns[0].width = Cm(3)
-    rl.columns[1].width = Cm(10)
-    rl.columns[2].width = Cm(3.5)
+    rl.columns[0].width = Cm(2.5)
+    rl.columns[1].width = Cm(4.5)
+    rl.columns[2].width = Cm(16)
+    rl.columns[3].width = Cm(3.7)
 
-    footer_line(doc, "Solecare Glasgow  |  H&S Risk Assessment  |  Review annually  |  Version 1.0  |  September 2026")
+    footer_line(doc, "Solecare Glasgow  |  H&S Risk Assessment  |  A4 Landscape  |  Review annually or after any incident  |  Version 1.0  |  September 2026")
     doc.save(os.path.join(OUT, "Risk_Assessment.docx"))
     print("  Risk_Assessment.docx — done")
 

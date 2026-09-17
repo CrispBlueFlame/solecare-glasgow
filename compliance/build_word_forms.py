@@ -124,31 +124,31 @@ def add_doc_title(doc, title, subtitle=None):
 
 def add_section_heading(doc, text):
     p = doc.add_paragraph()
-    p.paragraph_format.space_before = Pt(8)
-    p.paragraph_format.space_after = Pt(4)
+    p.paragraph_format.space_before = Pt(10)
+    p.paragraph_format.space_after = Pt(0)
+    p.paragraph_format.keep_with_next = True   # never orphan the heading
     run = p.add_run(text)
     run.font.name = 'Calibri Light'
     run.font.size = Pt(12)
     run.font.bold = True
     run.font.color.rgb = DARK
-    # Teal underline via bottom border on paragraph — simulate with a short table
     return p
 
 def add_teal_rule(doc):
-    tbl = doc.add_table(rows=1, cols=1)
-    cell = tbl.rows[0].cells[0]
-    shade_cell(cell, hex_str(TEAL))
-    cell_no_border(cell)
-    tc = cell._tc
-    tcPr = tc.get_or_add_tcPr()
-    tcH = OxmlElement('w:tcH')
-    trH = OxmlElement('w:trH')
-    trPr = tbl.rows[0]._tr.get_or_add_trPr()
-    trHe = OxmlElement('w:trHeight')
-    trHe.set(qn('w:val'), '80')
-    trHe.set(qn('w:hRule'), 'exact')
-    trPr.append(trHe)
-    doc.add_paragraph()
+    """Teal horizontal rule as a paragraph bottom-border so keep_with_next works."""
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.space_after = Pt(6)
+    p.paragraph_format.keep_with_next = True   # rule sticks to the content below
+    pPr = p._p.get_or_add_pPr()
+    pBdr = OxmlElement('w:pBdr')
+    bottom = OxmlElement('w:bottom')
+    bottom.set(qn('w:val'), 'single')
+    bottom.set(qn('w:sz'), '12')
+    bottom.set(qn('w:space'), '1')
+    bottom.set(qn('w:color'), hex_str(TEAL))
+    pBdr.append(bottom)
+    pPr.append(pBdr)
 
 def body_para(doc, text, color=None, italic=False, size=10):
     p = doc.add_paragraph()
@@ -353,11 +353,15 @@ def notice_box(doc, text, bg=None, text_color=None):
     )
     set_cell_margins(cell, top=120, bottom=120, left=160, right=160)
     p = cell.paragraphs[0]
+    p.paragraph_format.keep_with_next = True
     run = p.add_run(text)
     run.font.name = 'Calibri'
     run.font.size = Pt(9)
     run.font.color.rgb = text_color or TEXT_C
-    doc.add_paragraph()
+    # Tight spacer — keeps table close to what follows
+    sp = doc.add_paragraph()
+    sp.paragraph_format.space_before = Pt(0)
+    sp.paragraph_format.space_after = Pt(4)
 
 def footer_line(doc, text):
     p = doc.add_paragraph()
@@ -671,10 +675,36 @@ def build_complaints():
         "If we cannot resolve your concern to your satisfaction, you have the right to escalate to the "
         "Health and Care Professions Council (HCPC), which regulates podiatrists in the UK:")
 
-    form_table(doc, [
-        ("HCPC — fitness to practise concerns:", "fitness@hcpc-uk.org  |  0300 500 4472  |  hcpc-uk.org"),
-        ("ICO — data protection concerns:", "casework@ico.org.uk  |  0303 123 1113  |  ico.org.uk"),
-    ])
+    # Contact info display — not a form field, just a clean two-row info table
+    ctbl = doc.add_table(rows=2, cols=2)
+    ctbl.style = 'Table Grid'
+    contact_rows = [
+        ("HCPC — fitness to practise concerns", "fitness@hcpc-uk.org  |  0300 500 4472  |  hcpc-uk.org"),
+        ("ICO — data protection concerns",       "casework@ico.org.uk  |  0303 123 1113  |  ico.org.uk"),
+    ]
+    for i, (label, val) in enumerate(contact_rows):
+        lc = ctbl.rows[i].cells[0]
+        vc = ctbl.rows[i].cells[1]
+        shade_cell(lc, hex_str(BG))
+        cell_border_all(lc)
+        set_cell_margins(lc, top=100, bottom=100, left=120, right=120)
+        p = lc.paragraphs[0]
+        r = p.add_run(label)
+        r.font.name = 'Calibri'; r.font.size = Pt(9); r.font.bold = True; r.font.color.rgb = DARK
+        shade_cell(vc, 'FFFFFF')
+        cell_border_all(vc)
+        set_cell_margins(vc, top=100, bottom=100, left=120, right=120)
+        p2 = vc.paragraphs[0]
+        r2 = p2.add_run(val)
+        r2.font.name = 'Calibri'; r2.font.size = Pt(9); r2.font.color.rgb = TEXT_C
+        trPr = ctbl.rows[i]._tr.get_or_add_trPr()
+        trH = OxmlElement('w:trHeight')
+        trH.set(qn('w:val'), '360')
+        trH.set(qn('w:hRule'), 'atLeast')
+        trPr.append(trH)
+    ctbl.columns[0].width = Cm(5.5)
+    ctbl.columns[1].width = Cm(11)
+    doc.add_paragraph()
 
     add_section_heading(doc, "Our commitment")
     add_teal_rule(doc)
